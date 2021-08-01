@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+{% block title %}Entry Records | DON DON DONKI{% endblock %}
+
+{% block content %}
+{% from "includes/_formHelper.html" import render_field %}
+
+<!-- {% if 'user_updated' in session %}
+<div class="alert alert-warning alert-dismissible">
+  <button type="button" class="close" data-dismiss="alert">&times;</button>
+  {{ session.pop('user_updated', None) }} was updated.
+</div>
+{% endif %} -->
+
+
+{% if 'user_deleted' in session %}
+<div class="alert alert-danger alert-dismissible">
+  <button type="button" class="close" data-dismiss="alert">&times;</button>
+  {{ session.pop('user_deleted', None) }} was deleted.
+</div>
+{% endif %}
+
+
+<div class="row">
+    <div class="pt-4 pl-5" align="left">
+        <h4 class="p-3 bg-dark text-warning">ENTRY RECORDS - {{ loc }}</h4>
+    </div>
+</div>
+
+<div class="row">
+  <div class="pl-5 pt-3">
+    <form action="" method="POST">
+      <div class="form-group p-2">
+        <p><strong>Display: </strong></p>
+        {% for filter in filter_form.filter %}
+          <p>{{ filter }}
+          {{ filter.label }}</p>
+        {% endfor %}
+      </div>
+      <input type="submit" value="Apply filter" class="p-2 btn btn-dark text-warning">
+    </form>
+  </div>
+</div>
+
+<div class="p-5">
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Date</th>
+        <th>Entry Time</th>
+        <th>Exit Time</th>
+        <th>NRIC</th>
+        <th>Temperature (°C)</th>
+        <th>Mobile No.</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+        {% for key in key_list %}
+          {% if key in cus_dict %}
+            {% if cus_dict[key].get_temperature()|float <= 37.4 %}
+            <tr>
+            {% else %}
+            <tr class="table-danger">
+            {% endif %}
+              <td>{{ cus_dict[key].get_title() }}</td>
+              <td>{{ cus_dict[key].get_date() }}</td>
+              <td>{{ cus_dict[key].get_entrytime() }}</td>
+              <td>{{ cus_dict[key].get_exittime() }}</td>
+              <td>{{ cus_dict[key].get_nric() }}</td>
+              <td>{{ cus_dict[key].get_temperature() }}</td>
+              <td>{{ cus_dict[key].get_mobile() }}</td>
+              <td>
+                <form action="{{ url_for('delete_customer', store=store, id=key) }}" method="POST">
+                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModalall">
+                  Delete
+                </button>
+                <!-- Modal -->
+                  <div class="modal fade" id="deleteModalall" tabindex="-1" role="dialog" aria-labelledby="deleteModalallLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="deleteModalallLabel">Are you sure you want to delete this entry?</h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                          This action cannot be changed
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                            <input type="submit" value="Delete" class="btn btn-danger">
+                        </div>        
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+              </td>
+            </tr>
+          {% endif %}
+        {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+{% endblock %}

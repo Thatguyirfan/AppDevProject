@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+{% block title %}Manage Employees | DON DON DONKI{% endblock %}
+
+{% block content %}
+{% from "includes/_formHelper.html" import render_field %}
+
+{% if 'accSuccess' in session %}
+<div class="alert alert-success alert-dismissible mt-2">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    {{ session.pop('accSuccess', None) }}
+</div>
+{% endif %}
+
+{% if 'user_updated' in session %}
+<div class="alert alert-warning alert-dismissible mt-2">
+  <button type="button" class="close" data-dismiss="alert">&times;</button>
+  {{ session.pop('user_updated', None) }}
+</div>
+{% endif %}
+
+
+{% if 'user_deleted' in session %}
+<div class="alert alert-danger alert-dismissible mt-2">
+  <button type="button" class="close" data-dismiss="alert">&times;</button>
+  {{ session.pop('user_deleted', None) }}
+</div>
+{% endif %}
+
+
+<div class="row">
+    <div class="pt-4 pl-5" align="left">
+        <h4 class="p-3 bg-dark text-warning">MANAGE EMPLOYEES</h4>
+    </div>
+</div>
+
+<div class="p-5">
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>User ID</th>
+        <th>Full Name</th>
+        <th>Address</th>
+        <th>Phone</th>
+        <th>Email</th>
+        <th>Hours Clocked</th>
+        <th>Salary</th>
+        <th>Working Location</th>
+        <th></th>
+        <th></th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for user in users %}
+        <td>{{ users[user].get_user_id() }}</td>
+        <td>{{ users[user].get_full_name() }}</td>
+        <td>{{ users[user].get_address() }}</td>
+        <td>{{ users[user].get_phone() }}</td>
+        <td>{{ users[user].get_email() }}</td>
+        <td>{{ '{0:0.2f}'.format(users[user].get_hours_clocked()) }}h</td>
+        <td>{{ users[user].get_salary() }}</td>
+        <td>{{ users[user].get_working_location() }}</td>
+        <td><a href="{{ url_for('update_schedule', id=users[user].get_user_id()) }}" class="btn btn-info">Schedule</a></td>
+        <td><a href="{{ url_for('update_account', id=users[user].get_user_id()) }}" class="btn btn-warning">Update</a></td>
+        <td>
+            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#myModal_{{ users[user].get_user_id() }}">
+                Delete
+            </button>
+            <div class="modal" id="myModal_{{ users[user].get_user_id() }}">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+
+                        <!-- Modal Header -->
+                        <div class="modal-header">
+                            <h4 class="modal-title">Confirmation</h4>
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        </div>
+
+                        <!-- Modal body -->
+                        <div class="modal-body">
+                            Are you sure you want to delete {{ users[user].get_full_name() }}?
+                        </div>
+
+                        <!-- Modal footer -->
+                        <div class="modal-footer">
+                            <a href="{{ url_for('delete_account', id=users[user].get_user_id()) }}"><button type="button" class="btn btn-danger">Delete</button></a>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  <hr>
+  <a href="{{ url_for('create_employee') }}"><p>Create Employee</p></a>
+</div>
+
+
+{% endblock %}

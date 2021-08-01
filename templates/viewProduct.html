@@ -1,0 +1,267 @@
+{% extends "base.html" %} {% block title %}View Products | DON DON DONKI{% endblock %} {% block content %}
+<h1 class="display-4">View Products</h1>
+<!-- Nav tabs -->
+<ul class="nav nav-tabs">
+	<li class="nav-item">
+		<a class="nav-link active" data-toggle="tab" href="#snacks">Snacks</a>
+	</li>
+	<li class="nav-item">
+		<a class="nav-link" data-toggle="tab" href="#drinks">Drinks</a>
+	</li>
+</ul>
+
+<!-- Tab panes -->
+<div class="tab-content">
+    <!--Snacks Tab-->
+    <div class="tab-pane container-fluid active" id="snacks">
+        <br>
+        <h2>Snacks</h2>
+        <br>
+            {% for i in product_list %}
+            {% if i.get_category().upper() == "S" %}
+            {% set instocksDict = i.get_instocks() %}
+            {% for key, value in instocksDict.items() %}
+                {% if key == "WH" and value <= 25 %}
+                <div class="alert alert-danger">
+                    <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a>
+                    <div class="row">
+                        <div class="col-10">
+                            <strong>Danger!</strong> {{ i.get_name() }} has {{ value }} in stocks at {{ key }}
+                        </div>
+                        <div class="col-2">
+                            <a href="/orderInstocks"><button class="btn btn-danger">Order Instocks</button></a>
+                        </div>
+                    </div>
+                </div>
+                {% elif key == "WH" and value <= 50 %}
+                <div class="alert alert-warning">
+                    <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a>
+                    <div class="row">
+                        <div class="col-10">
+                            <strong>Warning!</strong> {{ i.get_name() }} has {{ value }} in stocks at {{ key }}
+                        </div>
+                        <div class="col-2">
+                            <a href="/orderInstocks"><button class="btn btn-warning">Order Instocks</button></a>
+                        </div>
+                    </div>
+                </div>
+                {% elif key != "WH" and value <= 5 %}
+                <div class="alert alert-danger">
+                    <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a>
+                    <div class="row">
+                        <div class="col-10">
+                            <strong>Danger!</strong> {{ i.get_name() }} has {{ value }} in stocks at {{ key }}
+                        </div>
+                        <div class="col-2">
+                            <a href="/orderInstocks"><button class="btn btn-danger">Order Instocks</button></a>
+                        </div>
+                    </div>
+                </div>
+                {% elif key != "WH" and value <= 10 %}
+                <div class="alert alert-warning">
+                    <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a>
+                    <div class="row">
+                        <div class="col-10">
+                            <strong>Warning!</strong> {{ i.get_name() }} has {{ value }} in stocks at {{ key }}
+                        </div>
+                        <div class="col-2">
+                            <a href="/orderInstocks"><button class="btn btn-warning">Order Instocks</button></a>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            {% endfor %}
+            {% endif %}
+            {% endfor %}
+            <!--Snacks Category-->
+            <div>
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                  <th>Product Name</th>
+                  <th>Product Description</th>
+                  <th>Product Ingredients</th>
+                  <th>Location Sold/instocks</th>
+                  <th>Price (S$)</th>
+                  <th>Category</th>
+                  <th>Image</th>
+                  <th></th>
+                  <th></th>
+              </tr>
+            </thead>
+            <tbody>
+            {% for i in product_list %}
+            {% if i.get_category().upper() == "S" %}
+            <tr>
+                <td>{{ i.get_name() }}</td>
+                <td>{{ i.get_desc() }}</td>
+                <td>{{ i.get_ingredients() }}</td>
+                <td>{{ i.get_instocks() }}</td>
+                <td>{{ i.get_price() }}</td>
+                <!--Check for category-->
+                {% if i.get_category().upper()  == "S" %}
+                <td>Snacks</td>
+                {% elif i.get_category().upper() == "D" %}
+                <td>Drinks</td>
+                {% endif %}
+
+                <td>{{ i.get_img() }}</td>
+                <td><a href="/updateProduct/{{i.get_id()}}" class="btn btn-warning">Update</a></td>
+                <td>
+                  <form action="{{url_for('delete_product', id=i.get_id())}}" method="POST">
+                  <!-- Button to Open the Modal -->
+                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#myModal_{{i.get_id()}}">
+                      Delete
+                    </button>
+
+                    <!-- The Modal -->
+                    <div class="modal fade" id="myModal_{{i.get_id()}}">
+                      <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+
+                          <!-- Modal Header -->
+                          <div class="modal-header">
+                            <h4 class="modal-title">Delete Confirmation</h4>
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                          </div>
+
+                          <!-- Modal body -->
+                          <div class="modal-body">
+                            Are you sure you want to delete {{i.get_name()}}?
+                          </div>
+
+                          <!-- Modal footer -->
+                          <div class="modal-footer">
+                            <input type="submit" value="Delete" class="btn btn-danger">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                          </div>
+
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+                </td>
+              </tr>
+            {% endif %}
+            {% endfor %}
+            </tbody>
+          </table>
+            </div>
+
+    </div>
+    <!--Drinks Tab-->
+    <div class="tab-pane container-fluid" id="drinks">
+        <br>
+        <h2>Drinks</h2>
+        <br>
+          {% for i in product_list %}
+            {% if i.get_category().upper() == "D" %}
+            {% set instocksDict = i.get_instocks() %}
+            {% for key, value in instocksDict.items() %}
+                {% if value <= 5 %}
+                <div class="alert alert-danger">
+                    <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a>
+                    <div class="row">
+                        <div class="col-10">
+                            <strong>Danger!</strong> {{ i.get_name() }} has {{ value }} in stocks at {{ key }}
+                        </div>
+                        <div class="col-2">
+                            <a href="/orderInstocks"><button class="btn btn-danger">Order Instocks</button></a>
+                        </div>
+                    </div>
+                </div>
+                {% elif value <= 10 %}
+                <div class="alert alert-warning">
+                    <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a>
+                    <div class="row">
+                        <div class="col-10">
+                            <strong>Warning!</strong> {{ i.get_name() }} has {{ value }} in stocks at {{ key }}
+                        </div>
+                        <div class="col-2">
+                            <a href="/orderInstocks"><button class="btn btn-warning">Order Instocks</button></a>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            {% endfor %}
+            {% endif %}
+            {% endfor %}
+            <!--Drinks Category-->
+            <div>
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                  <th>Product Name</th>
+                  <th>Product Description</th>
+                  <th>Product Ingredients</th>
+                  <th>Location Sold/instocks</th>
+                  <th>Price (S$)</th>
+                  <th>Category</th>
+                  <th>Image</th>
+                  <th></th>
+                  <th></th>
+              </tr>
+            </thead>
+            <tbody>
+            {% for i in product_list %}
+            {% if i.get_category().upper() == "D" %}
+            <tr>
+                <td>{{ i.get_name() }}</td>
+                <td>{{ i.get_desc() }}</td>
+                <td>{{ i.get_ingredients() }}</td>
+                <td>{{ i.get_instocks() }}</td>
+                <td>{{ i.get_price() }}</td>
+                <!--Check for category-->
+                {% if i.get_category().upper() == "S" %}
+                <td>Snacks</td>
+                {% elif i.get_category().upper() == "D" %}
+                <td>Drinks</td>
+                {% endif %}
+
+                <td>{{ i.get_img() }}</td>
+                <td><a href="/updateProduct/{{i.get_id()}}" class="btn btn-warning">Update</a></td>
+                <td>
+                  <form action="{{url_for('delete_product', id=i.get_id())}}" method="POST">
+                  <!-- Button to Open the Modal -->
+                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#myModal1_{{i.get_id()}}">
+                      Delete
+                    </button>
+
+                    <!-- The Modal -->
+                    <div class="modal fade" id="myModal1_{{i.get_id()}}">
+                      <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+
+                          <!-- Modal Header -->
+                          <div class="modal-header">
+                            <h4 class="modal-title">Delete Confirmation</h4>
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                          </div>
+
+                          <!-- Modal body -->
+                          <div class="modal-body">
+                            Are you sure you want to delete {{i.get_name()}}?
+                          </div>
+
+                          <!-- Modal footer -->
+                          <div class="modal-footer">
+                            <input type="submit" value="Delete" class="btn btn-danger">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                          </div>
+
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+                </td>
+              </tr>
+            {% endif %}
+            {% endfor %}
+            </tbody>
+          </table>
+            </div>
+
+    </div>
+</div>
+
+{% endblock %}

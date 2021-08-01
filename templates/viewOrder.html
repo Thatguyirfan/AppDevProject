@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}View Orders | DON DON DONKI{% endblock %}
+
+{% block content %}
+{% from "includes/_formHelper.html" import render_field %}
+
+<div class="p-5">
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Order ID</th>
+        <th>Order Date</th>
+        <th>Total</th>
+        <th>Delivery Status</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for i in full_order_list %}
+      {% set order_id = i[-1].get_current_id() %}
+        <tr>
+            <td>{{ order_id }}</td>
+            <td>{{ i[-1].get_orderDate() }}</td>
+            <td>${{ i[-1].get_total() }}</td>
+            {% if user.get_title() in ["Manager", "Employee"] %}
+            <td>{{ i[-1].get_delivery_status() }}</td>
+            <form action="{{ url_for('update_order', id=order_id) }}" class="POST">
+              <td><input type="submit" value="Update" class="p-3 btn btn-dark text-warning" style="margin-top: -5px"></td>
+            </form>
+            {% else %}
+            <td>{{ i[-1].get_delivery_status() }}</td>
+            <td></td>
+            {% endif %}
+        </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+{% endblock %}

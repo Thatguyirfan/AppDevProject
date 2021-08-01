@@ -1,0 +1,194 @@
+{% extends "base.html" %}
+{% block title %}Checkout | DON DON DONKI{% endblock %}
+
+{% block head %}
+<style>
+.row {
+  display: -ms-flexbox; /* IE10 */
+  display: flex;
+  -ms-flex-wrap: wrap; /* IE10 */
+  flex-wrap: wrap;
+  margin: 0 -16px;
+     }
+
+.col-25 {
+  -ms-flex: 25%; /* IE10 */
+  flex: 25%;
+      }
+
+.col-50 {
+  -ms-flex: 50%; /* IE10 */
+  flex: 50%;
+      }
+
+.col-75 {
+  -ms-flex: 75%; /* IE10 */
+  flex: 75%;
+      }
+
+.col-25,
+.col-50,
+.col-75 {
+  padding: 0 16px;
+    }
+
+.OnlyCheckOut {
+  background-color: #f2f2f2;
+  padding: 30px 50px 15px 50px;
+  border-radius: 3px;
+    }
+
+input[type=text] {
+  width: 100%;
+  margin-bottom: 20px;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+    }
+
+label {
+  margin-bottom: 10px;
+  display: block;
+    }
+
+.icon-container {
+  margin-bottom: 20px;
+  padding: 7px 0;
+  font-size: 24px;
+    }
+
+#checkoutBtn {
+  background-color: #4CAF50;
+  color: white;
+  padding: 12px;
+  margin: 10px 0;
+  border: none;
+  width: 100%;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 17px;
+    }
+
+#checkoutBtn:hover {
+  background-color: #45a049;
+    }
+
+#backBtn {
+  background-color: #F03D5A;
+  color: white;
+  padding: 12px;
+  margin: 10px 0;
+  border: none;
+  width: 49%;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 17px;
+    }
+
+#backBtn:hover {
+  background-color: #E82041;
+    }
+
+a {
+  color: #2196F3;
+    }
+
+hr {
+  border: 1px solid lightgrey;
+    }
+
+span.price {
+  float: right;
+  color: grey;
+    }
+
+@media (max-width: 800px) {
+  .row {
+    flex-direction: column-reverse;
+  }
+  .col-25 {
+    margin-bottom: 20px;
+  }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<br>
+<br>
+<br>
+<div class="row">
+  <div class="col-75">
+    <div class="container">
+      <div class="OnlyCheckOut">
+        <form action="{{url_for('customerInfo')}}" method="POST">
+
+        <div class="row">
+          <div class="col-50">
+            <h3>Shipping Address</h3>
+            <br>
+            <br>
+            <label for="fname"><i class="fa fa-user"></i> Full Name</label>
+            <input type="text" id="fname" name="name" value="{{ user.get_full_name() }}" readonly>
+            <label for="email"><i class="fa fa-envelope"></i> Email</label>
+            <input type="text" id="email" name="email" value="{{ user.get_email() }}" readonly>
+            <label for="adr"><i class="fa fa-address-card-o"></i> Address</label>
+            <input type="text" id="adr" name="address" value="{{ user.get_address() }}" readonly>
+
+            <div class="row">
+              <div class="col-50">
+                <label for="unitNumber">Unit Number</label>
+                <input type="text" id="unitNumber" name="state" placeholder="#10-23" required>
+              </div>
+              <div class="col-50">
+                <label for="postalCode">Postal Code</label>
+                <input type="text" id="postalCode" name="postalCode" placeholder="123987" required>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-50">
+            <h3>Payment</h3>
+            <br>
+            <br>
+            <label for="cname">Name on Card</label>
+            <input type="text" id="cname" name="cardname" placeholder="{{ user.get_full_name() }}" required>
+            <label for="ccnum">Credit card number</label>
+            <input type="text" id="ccnum" name="cardnumber" placeholder="1111-2222-3333-4444" required>
+            <label for="expmonth">Exp Month</label>
+            <input type="text" id="expmonth" name="expmonth" placeholder="September" required>
+            <div class="row">
+              <div class="col-50">
+                <label for="expyear">Exp Year</label>
+                <input type="text" id="expyear" name="expyear" placeholder="2018" required>
+              </div>
+              <div class="col-50">
+                <label for="cvv">CVV</label>
+                <input type="text" id="cvv" name="cvv" placeholder="352" required>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <div class="row">
+          <input type="submit" value="Continue to Payment" class="btn" id="checkoutBtn">
+        </div>
+      </form>
+      </div>
+    </div>
+  </div>
+  <div class="col-25">
+    <div class="container">
+      <h4>Cart <span class="price" style="color:black"><i class="fa fa-shopping-cart"></i> <b>{{ count }}</b></span></h4>
+      {% for id in current_quantity %}
+      {% set indiv = products[id] %}
+      <p>{{ indiv.get_name() }} <span class="price">${{ indiv.get_price() * current_quantity[indiv.get_id()] }}</span></p>
+      {% endfor %}
+      <p>Shipping <span class="price" style="color:black">$3.00</span></p>
+      <hr>
+      {% set total = total %}
+      <p>Total <span class="price" style="color:black"><b>${{ total + 3}}</b></span></p>
+    </div>
+  </div>
+</div>
+{% endblock %}

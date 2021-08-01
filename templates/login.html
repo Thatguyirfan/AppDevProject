@@ -1,0 +1,37 @@
+{% extends "base.html" %} {% block title %}Login | DON DON DONKI{% endblock %} {% block content %}
+<br>
+{% from "includes/_formHelper.html" import render_field %}
+{% if 'accSuccess' in session %}
+<div class="alert alert-success alert-dismissible container-sm">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    {{ session.pop('accSuccess', None) }}
+</div>
+{% elif 'accError' in session %}
+<div class="alert alert-danger alert-dismissible container-sm">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    {{ session.pop('accError', None) }}
+</div>
+{% endif %}
+
+<div class="container-sm" style="background-color: #EFEFEF; padding: 30px; line-height: 5px; border-radius: 5px">
+    <h1 class="display-4">Login</h1>
+    <br>
+    <br>
+    <p style="font-style: italic">New user? Click <a href="/register">here</a>.</p>
+    <br>
+    <br>
+    <form method="POST" action="">
+        <div class="form-group">
+            {{ render_field(form.email, class="form-control", style="margin-bottom: 5px") }}
+        </div>
+        <br>
+        <div class="form-group">
+            {{ render_field(form.password, class="form-control", style="margin-bottom: 5px") }}
+        </div>
+        <br>
+        <input type="submit" value="Submit" class="btn btn-primary"/>
+        <hr>
+        <a href="/forgotpassword"><p>Forgot password</p></a>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+{% block title %}Products | DON DON DONKI{% endblock %}
+
+
+{% block content %}
+{% from "includes/_formHelper.html" import render_field %}
+
+<!--Side Bar-->
+<div class="container">
+    <div class="row">
+        <div class="col-md-3 p-3">
+            <!--Search bar-->
+            <div>
+                <form method="POST" action="{{url_for('search')}}" class="form-inline mt-2 mt-md-0">
+                    <div class="form-group">
+                        <input type="text" placeholder="Search.." name="search">
+                        <button class="btn" type="submit"><i  class="fa fa-search" style="font-size: 25px"></i></button>
+                     </div>
+                </form>
+            </div>
+            <!--try using navbar-->
+            <div>
+                <nav class="nav flex-column bg-light navbar-light nav-pills yellow p-2">
+                    <ul class="navbar-nav">
+                        <li class="nav-item dropdown">
+                          <a class="nav-link dropdown-toggle" href="#" id="navbardrop"  data-toggle="dropdown">
+                              SORT BY
+                          </a>
+                          <div class="dropdown-menu">
+                              <a class="dropdown-item" href="/products">Relevancy</a>
+                              <a class="dropdown-item" href="/products/sortBy/newest">Newest</a>
+                              <a class="dropdown-item" href="/products/sortBy/low_to_high">Price: Low to High</a>
+                              <a class="dropdown-item" href="/products/sortBy/high_to_low">Price: High to Low</a>
+                              <a class="dropdown-item" href="/products/sortBy/a_to_z">Brand: A-Z</a>
+                              <a class="dropdown-item" href="/products/sortBy/z_to_a">Brand: Z-A</a>
+                          </div>
+                      </li>
+                    </ul>
+                </nav>
+            </div>
+            <br>
+            <div>
+                <h5>VIEW BY</h5>
+                <nav class="nav flex-column bg-light navbar-light nav-pills yellow p-3">
+                    <a class="nav-link active" data-toggle="tab" href="#viewAll">View All</a>
+                    <a class="nav-link" data-toggle="tab" href="#snacks">Snacks</a>
+                    <a class="nav-link" data-toggle="tab" href="#drinks">Drinks</a>
+                </nav>
+            </div>
+        </div>
+
+
+        <!--other part of view-->
+        <div class="col-md-9 w-75 p-3">
+            <div class="tab-content">
+                <!--View All products-->
+                <div class="container tab-pane active" id="viewAll">
+                    <h3>View ><a href="/products">All Products</a></h3>
+                    <div class="row">
+                    {% for product in product_list %}
+                    <!--Individual Product-->
+                        <div class="col-4 p-3">
+                            <img src="{{url_for('static', filename='productUploads/'+ product.get_img())}}" alt="Product Image" width="100%">
+                            <h4>{{ product.get_name() }}</h4>
+                            <p>$ {{ product.get_price() }}</p>
+                            <a href="{{url_for('view_individual', id=product.get_id())}}" class="btn btn-warning">MORE INFORMATION</a>
+                        </div>
+                    {% endfor %}
+                    </div>
+                </div>
+                <!--View Snacks only-->
+                <div class="container tab-pane" id="snacks">
+                    <h3>View > <a href="/products">All Products</a> > Snacks</h3>
+                    <div class="row">
+                        {% for product in product_list %}
+
+                        {% if product.get_category().upper() == "S" %}
+                        <div class="col-4 p-3">
+                            <img src="{{url_for('static', filename='productUploads/'+ product.get_img())}}" alt="Product Image" width="100%">
+                            <h4>{{ product.get_name() }}</h4>
+                            <p>$ {{ product.get_price() }}</p>
+                            <a href="{{url_for('view_individual', id=product.get_id())}}" class="btn btn-warning">MORE INFORMATION</a>
+                        </div>
+
+                        {% endif %}
+                        {% endfor %}
+                </div>
+            </div>
+                <!--View Drinks only-->
+                <div class="container tab-pane" id="drinks">
+                    <h3>View > <a href="/products">All Products</a> > Drinks</h3>
+                    <div class="row">
+                        {% for product in product_list %}
+
+                        {% if product.get_category().upper() == "D" %}
+                        <div class="col-4 p-3">
+                            <img src="{{url_for('static', filename='productUploads/'+ product.get_img())}}" alt="Product Image" width="100%">
+                            <h4>{{ product.get_name() }}</h4>
+                            <p>$ {{ product.get_price() }}</p>
+                            <a href="{{url_for('view_individual', id=product.get_id())}}" class="btn btn-warning">MORE INFORMATION</a>
+                        </div>
+
+                        {% endif %}
+                        {% endfor %}
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

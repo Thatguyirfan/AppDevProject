@@ -1,0 +1,37 @@
+    <nav class="navbar navbar-expand-sm navbar-light bg-warning">
+      <!-- Links -->
+      <ul class="navbar-nav">
+        <!-- Dropdown -->
+          <li class="nav-item">
+              <a class="nav-link" href="/"><strong>HOME</strong></a>
+          </li>
+          <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('viewAll')}}"><strong>PRODUCTS</strong></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/careers"><strong>CAREERS</strong></a>
+          </li>
+          <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('store_entry') }}"><strong>STORE ENTRY</strong></a>
+          </li>
+          <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('store_count') }}"><strong>STORE COUNT</strong></a>
+          </li>
+      </ul>
+      <!-- logo -->
+        <a class="navbar-brand mx-auto d-block" href="{{ url_for('home') }}"><img src="{{url_for('static', filename='dondon_logo.png')}}" alt="DON DON DONKI" width = "150"></a>
+      <!--- search, acc, cart --->
+        <form class="form-inline mt-2 mt-md-0" action="{{url_for('search')}}" method="POST">
+            <input class="form-control mr-sm-2" type="text" placeholder="Search" name="search">
+            <button class="btn" type="submit"><i class="fa fa-search" style="font-size: 25px"></i></button>
+        </form>
+        <ul class="nav-bar nav">
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('login') }}"><i class='fas fa-user-circle' style="font-size:25px; color:black"></i></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('cartPage')}}"><i class='fas fa-shopping-cart' style="font-size:25px; color:black"></i></a>
+            </li>
+      </ul>
+    </nav>
+

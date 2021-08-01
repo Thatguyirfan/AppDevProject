@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Entry Records | DON DON DONKI{% endblock %}
+
+{% block content %}
+{% from "includes/_formHelper.html" import render_field %}
+
+<div class="row">
+    <div class="pt-4 pl-5" align="left">
+        <h4 class="p-3 bg-dark text-warning">ENTRY RECORDS</h4>
+    </div>
+</div>
+
+<div class="row">
+    <form method="POST" action="">
+        <div class="form-group p-5">
+            {{ render_field(form.store, class="form-control") }}
+        </div>
+        <div class="row">
+        <div class="col-12 p-3" align="center">
+            <input type="submit" value="Submit" class="p-3 btn btn-dark text-warning">
+        </div>
+    </div>
+    </form>
+</div>
+
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Feedback | DON DON DONKI{% endblock %}
+
+{% block content %}
+{% from "includes/_formHelper.html" import render_field %}
+
+<div class="p-5" style="background-color: #EFEFEF; padding: 20%; line-height: 5px; border-radius: 5px">
+  <div class="row">
+    <div class="col-12 p-3 d-flex justify-content-center">
+      <h1>Thank you for your feedback!</h1>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12 p-3 d-flex justify-content-center">
+      <h3>Your feedback will be reviewed by our team.</h3>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12 p-3 d-flex justify-content-center">
+      <a class="btn btn-warning" href='/'><strong>Return to Home</strong></a>
+    </div>
+  </div>
+</div>
+{% endblock %}

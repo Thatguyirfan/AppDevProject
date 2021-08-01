@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block title %}View Feedback | DON DON DONKI{% endblock %}
+
+{% block content %}
+{% from "includes/_formHelper.html" import render_field %}
+
+
+<div class="row">
+    <div class="pt-4 pl-5" align="left">
+        <h4 class="p-3 bg-dark text-warning">Customer Feedback</h4>
+    </div>
+</div>
+
+<div class="row">
+  <div class="pl-5 pt-3">
+    <form action="" method="POST">
+      <div class="form-group p-2">
+        <p><strong>Display: </strong></p>
+        {{ render_field(filter_form.store, class="form-control") }}
+        {{ render_field(filter_form.reason, class="form-control") }}
+      </div>
+      <input type="submit" value="Apply filter" class="p-2 btn btn-dark text-warning">
+    </form>
+  </div>
+</div>
+
+<div class="p-5">
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Store</th>
+        <th>Reason</th>
+        <th>Name</th>
+        <th>Mobile</th>
+        <th>Email</th>
+        <th>Feedback</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% if store_filter == "All" and reason_filter == "All" %}
+          {% for i in feedback_list %}
+            <tr>
+              <td>{{ i.get_date() }}</td>
+              <td>{{ i.get_store() }}</td>
+              <td>{{ i.get_reason() }}</td>
+              <td>{{ i.get_name() }}</td>
+              <td>{{ i.get_mobile() }}</td>
+              <td>{{ i.get_email() }}</td>
+              <td>{{ i.get_message() }}</td>
+            </tr>
+        {% endfor %}
+      {% else %}
+        {% for i in filter_list %}
+          <tr>
+            <td>{{ i.get_date() }}</td>
+            <td>{{ i.get_store() }}</td>
+            <td>{{ i.get_reason() }}</td>
+            <td>{{ i.get_name() }}</td>
+            <td>{{ i.get_mobile() }}</td>
+            <td>{{ i.get_email() }}</td>
+            <td>{{ i.get_message() }}</td>
+            </tr>
+        {% endfor %}
+      {% endif %}
+    </tbody>
+  </table>
+</div>
+
+{% endblock %}

@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block title %}View Job Applications | DON DON DONKI{% endblock %}
+
+{% block content %}
+{% from "includes/_formHelper.html" import render_field %}
+<h3>View Job Applications</h3>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Applicant Name</th>
+            <th>Age</th>
+            <th>Phone Number</th>
+            <th>Email</th>
+            <th>Location</th>
+            <th>Commitment Period</th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            {% for key, i in applicants.items() %}
+                <td> {{ i["name"] }} </td>
+                <td> {{ i["age"] }} </td>
+                <td> {{ i["phoneNo"] }} </td>
+                <td> {{ i["email"] }} </td>
+                <td> {{ i["location"] }} </td>
+                <td> {{ i["commitmentPeriod"] }} </td>
+                <td><a href="/updateApplicant/{{ key }}" class="btn btn-warning">Update</a></td>
+                <td>
+                  <form action="{{url_for('delete_applicant', id=key)}}" method="POST">
+                  <!-- Button to Open the Modal -->
+                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#myModal_{{ key }}">
+                      Delete
+                    </button>
+
+                    <!-- The Modal -->
+                    <div class="modal fade" id="myModal_{{ key }}">
+                      <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+
+                          <!-- Modal Header -->
+                          <div class="modal-header">
+                            <h4 class="modal-title">Delete Confirmation</h4>
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                          </div>
+
+                          <!-- Modal body -->
+                          <div class="modal-body">
+                            Are you sure you want to delete {{ i["name"] }}?
+                          </div>
+
+                          <!-- Modal footer -->
+                          <div class="modal-footer">
+                            <input type="submit" value="Delete" class="btn btn-danger">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                          </div>
+
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+                </td>
+             {% endfor %}
+        </tr>
+    </tbody>
+
+
+</table>
+{% endblock %}

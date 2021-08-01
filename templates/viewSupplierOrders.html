@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% block title %}View Supplier Orders | DON DON DONKI{% endblock %}
+
+{% block content %}
+<h1 class="display-4">View Order Entries</h1>
+
+<!-- Tab panes -->
+<div class="row">
+    <!--Snacks Tab-->
+    <div class="col">
+        <br>
+        <h2>Supplier Orders</h2>
+        <br>
+        {% if supplierDict|length == 0 %}
+        <p>There are no orders currently!</p>
+        {% else %}
+        <p>There are {{supplierDict|length}} orders.</p>
+        {% endif %}
+            <div>
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                  <th>Product Name</th>
+                  <th>Product Quantity</th>
+                  <th>Product Delivery Location</th>
+                  <th></th>
+                  <th></th>
+              </tr>
+            </thead>
+            <tbody>
+            {% for key in supplierDict %}
+            {% set i = supplierDict[key] %}
+            {% set productKey = key %}
+            <tr>
+                <td>{{ i["productName"] }}</td>
+                <td>{{ i["quantity"] }}</td>
+                <td>{{ i["send_to"] }}</td>
+
+                <td><a href="/updateSupplierOrder/{{productKey}}" class="btn btn-warning">Update</a></td>
+                <td>
+                  <form action="{{url_for('delete_supplierOrder', id=productKey)}}" method="POST">
+                  <!-- Button to Open the Modal -->
+                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#myModal_{{productKey}}">
+                      Delete
+                    </button>
+
+                    <!-- The Modal -->
+                    <div class="modal fade" id="myModal_{{productKey}}">
+                      <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+
+                          <!-- Modal Header -->
+                          <div class="modal-header">
+                            <h4 class="modal-title">Delete Confirmation</h4>
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                          </div>
+
+                          <!-- Modal body -->
+                          <div class="modal-body">
+                            Are you sure you want to delete order?
+                          </div>
+
+                          <!-- Modal footer -->
+                          <div class="modal-footer">
+                            <input type="submit" value="Delete" class="btn btn-danger">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                          </div>
+
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+                </td>
+              </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+
+                <a href="/confirmSupplier" class="btn btn-warning" style="text-align: right;">Confirm Order</a>
+                <a href="/orderInstocks" class="btn btn-warning" style="text-align: right;">Add order</a>
+            </div>
+    </div>
+</div>
+
+{% endblock %}

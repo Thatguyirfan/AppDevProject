@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}Edit Schedule | DON DON DONKI{% endblock %}
+
+{% block content %}
+<br>
+{% from "includes/_formHelper.html" import render_field %}
+{% if 'accSuccess' in session %}
+<div class="alert alert-success alert-dismissible container-sm">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    {{ session.pop('accSuccess', None) }}
+</div>
+{% elif 'accError' in session %}
+<div class="alert alert-danger alert-dismissible container-sm">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    {{ session.pop('accError', None) }}
+</div>
+{% endif %}
+
+<div class="container-sm" style="background-color: #EFEFEF; padding: 30px; line-height: 5px; border-radius: 5px">
+    <h1 class="display-4">Edit Schedule</h1>
+    <br>
+    <br>
+    <form method="POST" action="">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Time</th>
+                    {% for day in user.get_schedule() %}
+                    <th scope="col">{{ day }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            {% set times = ["09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00"] %}
+            <tbody>
+                {% for time in times %}
+                {% set outer_loop = loop %}
+                <tr>
+                    <th scope="row">{{ time }}</th>
+                    {% for day in user.get_schedule() %}
+                    <td>{{ render_field(form[day + outer_loop.index0|string()], class="form-control", style="margin-top: -10px") }}</td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <input type="submit" value="Submit" class="btn btn-primary"/>
+        <hr>
+        <a href="{{ url_for('manage_employees') }}"><p>Go back</p></a>
+    </form>
+</div>
+{% endblock %}

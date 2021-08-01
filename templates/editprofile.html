@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+{% block title %}{% if request.path == url_for("edit_profile") %}Edit Profile{% else %}Update Account{% endif %} | DON DON DONKI{% endblock %}
+
+{% block content %}
+<br>
+{% from "includes/_formHelper.html" import render_field %}
+{% if 'accSuccess' in session %}
+<div class="alert alert-success alert-dismissible container-sm">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    {{ session.pop('accSuccess', None) }}
+</div>
+{% elif 'accError' in session %}
+<div class="alert alert-danger alert-dismissible container-sm">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    {{ session.pop('accError', None) }}
+</div>
+{% endif %}
+
+<div class="container-sm" style="background-color: #EFEFEF; padding: 30px; line-height: 5px; border-radius: 5px">
+    <h1 class="display-4">Edit Profile</h1>
+    <br>
+    <br>
+    <form method="POST" action="">
+        <div class="form-group">
+            {{ render_field(form.full_name, class="form-control", style="margin-bottom: 5px") }}
+        </div>
+        <br>
+        <div class="form-group">
+            {{ render_field(form.address, class="form-control", style="margin-bottom: 5px") }}
+        </div>
+        <br>
+        <div class="form-group">
+            {{ render_field(form.phone, class="form-control", style="margin-bottom: 5px") }}
+        </div>
+        <br>
+        <div class="form-group">
+            {{ render_field(form.email, class="form-control", style="margin-bottom: 5px") }}
+        </div>
+        <br>
+        {% if user.get_title() == "Employee" and request.path != url_for('edit_profile') %}
+        <div class="form-group">
+            {{ render_field(form.salary, class="form-control", style="margin-bottom: 5px") }}
+        </div>
+        <br>
+        <div class="form-group">
+            {{ render_field(form.working_location, class="form-control", style="margin-bottom: 5px") }}
+        </div>
+        <br>
+        {% endif %}
+        <input type="submit" value="Submit" class="btn btn-primary"/>
+        {% if request.path == url_for('edit_profile') %}
+        <form action="{{url_for('delete_self')}}" method="POST">
+            <!--<input type="submit" value="Delete" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete {#user.get_first_name()#} {#user.get_last_name()#}?');">-->
+            <!-- Button to Open the Modal -->
+            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#myModal_{{session['userID']}}">
+                Delete Account
+            </button>
+
+            <!-- The Modal -->
+            <div class="modal" id="myModal_{{session['userID']}}">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+
+                        <!-- Modal Header -->
+                        <div class="modal-header">
+                            <h4 class="modal-title">Confirmation</h4>
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        </div>
+
+                        <!-- Modal body -->
+                        <div class="modal-body">
+                            Are you sure you want to delete your account?
+                        </div>
+
+                        <!-- Modal footer -->
+                        <div class="modal-footer">
+                            <a href="{{ url_for('delete_self') }}"><button type="button" class="btn btn-danger">Delete</button></a>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </form>
+        {% endif %}
+        <hr>
+        {% if request.path == url_for('edit_profile') %}<a href="{{ url_for('change_password') }}"><p>Change password</p></a>{% endif %}
+        <a href="{% if request.path == url_for('edit_profile') %}{{ url_for('dashboard') }}{% else %}{% if user.get_title() == 'Employee' %}{{ url_for('manage_employees') }}{% else %}{{ url_for('manage_accounts') }}{% endif %}{% endif %}"><p>Go back</p></a>
+    </form>
+</div>
+{% endblock %}

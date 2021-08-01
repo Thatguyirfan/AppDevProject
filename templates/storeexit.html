@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Store Entry Details | DON DON DONKI{% endblock %}
+
+{% block content %}
+{% from "includes/_formHelper.html" import render_field %}
+
+<div class="container col-6" style="background-color: #EFEFEF; padding: 30px; line-height: 5px; border-radius: 5px">
+  <div class="row">
+    <div class="pt-4 pl-5 col-12">
+        <h4 class="p-3 bg-dark text-warning" align="center">STORE ENTRY DETAILS</h4>
+    </div>
+  </div>
+  <div class="p-5" align="center">
+    <h2 class='pb-4'>Date: {{ date }}</h2>
+    <h1 class='pb-4'>Entry Time: {{ entrytime }}</h1>
+    <h2 class=''>Outlet: {{ store }}</h2>
+  </div>
+  <div class="pt-3">
+    <form action="/storeentrydetails/{{ store }}/{{ id }}" method="POST" align="center">
+      <input type="submit" value="Exit Store" class="btn btn-danger">
+    </form>
+  </div>
+</div>
+
+{% endblock %}
